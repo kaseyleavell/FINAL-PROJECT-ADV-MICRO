@@ -116,6 +116,7 @@ void readADC()
 	ADC10CTL0 &=~ ADC10IFG;
 	ADC10CTL0 &=~ ADC10IE;
 	outVal = ADC10MEM;
+
 //	if(startInc == 0){
 //		temp = outVal;
 //	}if(startInc == 1)
