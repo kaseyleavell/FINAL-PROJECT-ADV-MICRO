@@ -13,11 +13,9 @@ unsigned int adc;
 int fired = 0;
 int i = 0;
 int startInc = 0;
-
 void readADC();
 void startComm();
 void setLine();
-void stopComm();
 
 int main(void)
 {
@@ -34,7 +32,7 @@ int main(void)
 
 	CCR0 = 50000;
 
-	outVal = 682;
+	outVal = 1023;
 	//pwm timer
 	//outVal = 726;
 	P2DIR |= LED;
@@ -46,8 +44,9 @@ int main(void)
 	TA1CTL = TASSEL_2 + MC_1;
 	TACTL = TASSEL_2 + MC_1;
 	__enable_interrupt();
-	// ADC10CTL0 |= ENC + ADC10SC;             // Sampling and conversion start
-	CCTL0 = CCIE;
+	//ADC10CTL0 |= ENC + ADC10SC;             // Sampling and conversion start
+	//CCTL0 = CCIE;
+	startComm();
 	while(1)
 	{
 		/*
@@ -80,18 +79,21 @@ __interrupt void Timer_A (void)
 		}
 		i++;
 		outVal = outVal << 1;
-	}else
+	}
+	if(i==10)
 	{
 		i = 0;
-		outVal = 0;
-		stopComm();
+		//outVal = 0;
+		//testing multiple byte sending
+		outVal = 682;
 	}
 }
 void startComm()
 {
 	//activate comm timer after pulling line high
-	int garbageBit[10] = {1,0,1,0,1,0,1,0,1,0};
+	outVal = 682; //bin 1010101010
 	//clock off starting 10-bits
+	CCTL0 = CCIE;
 }
 void setLine()
 {
@@ -111,10 +113,4 @@ void readADC()
 {
 	outVal = ADC10MEM;
 	sample = 1;
-}
-void stopComm()
-{
-	CCTL0 &=~ CCIE;
-	P2DIR &=~ LED;
-	startInc = 0;
 }
