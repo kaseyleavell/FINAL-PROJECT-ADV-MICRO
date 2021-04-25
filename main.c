@@ -3,6 +3,8 @@
 
 /**
  * Final Project main.c
+ * Programming an MSP430 G2553 to sample a microphone output and transmit it via infrared
+ * to an MSP430 acting as a reciever 
  */
 #define LED 0x04;
 #define SLEEP; __delay_cycles(4000);
@@ -106,10 +108,7 @@ void stopComm()
 	outVal = 0;
 	ADC10CTL0 |= ADC10IE;
 	ADC10CTL0 |= ENC + ADC10SC;
-//	if(startInc == 3)
-//	{
-//		SLEEP;
-//	}
+
 }
 void readADC()
 {
@@ -117,15 +116,7 @@ void readADC()
 	ADC10CTL0 &=~ ADC10IE;
 	outVal = ADC10MEM;
 
-//	if(startInc == 0){
-//		temp = outVal;
-//	}if(startInc == 1)
-//	{
-//		temp1 = outVal;
-//	}if(startInc == 2)
-//	{
-//		temp2 = outVal;
-//	}
+
 	sample = 1;
 	startInc++;
 }
